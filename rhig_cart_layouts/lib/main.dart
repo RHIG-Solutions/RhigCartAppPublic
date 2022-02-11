@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/screens/registration_screen.dart';
-import 'package:rhig_cart_layouts/screens/search_page.dart';
+import 'package:rhig_cart_layouts/screens/search_result_screen.dart';
+import 'package:rhig_cart_layouts/screens/search_screen.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'package:rhig_cart_layouts/screens/forgot_password_screen.dart';
 import 'package:rhig_cart_layouts/screens/splash_screen.dart';
@@ -50,8 +51,9 @@ class RHIGCartLayouts extends StatelessWidget {
         '/forgotpassword': (context) => const ForgotPasswordScreen(),
         '/registration': (context) => const RegistrationScreen(),
         '/search': (context) => const SearchPage(),
+        '/searchresult': (context) => SearchResultPage(),
       },
-      initialRoute: '/search',
+      initialRoute: '/searchresult',
     );
   }
 }

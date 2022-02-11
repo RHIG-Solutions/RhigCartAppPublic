@@ -81,7 +81,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: bottomButtonPadding,
-        child: BuildButton(title: 'Register', onPressed: () {}),
+        //TODO: Add proper navigation, currently just popping the screen.
+        child: BuildButton(
+            title: 'Register',
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
     );
   }

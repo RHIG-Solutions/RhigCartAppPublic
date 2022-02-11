@@ -62,3 +62,14 @@ const kNearbyVendorsBodyTextStyle = TextStyle(
   fontSize: 6.5,
   fontWeight: FontWeight.bold,
 );
+const kSearchResultNameTextStyle = TextStyle(
+  color: kRHIGGreen,
+  fontSize: 14.0,
+  fontWeight: FontWeight.bold,
+);
+
+const kSearchResultBodyTextStyle = TextStyle(
+  color: kRHIGGrey,
+  fontSize: 8,
+  fontWeight: FontWeight.bold,
+);

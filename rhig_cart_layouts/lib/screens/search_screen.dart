@@ -20,6 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Vendor Search'),
       ),
@@ -49,7 +50,9 @@ class _SearchPageState extends State<SearchPage> {
                           hintText: 'Search Vendor',
                           border: InputBorder.none,
                           prefixIcon: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/searchresult');
+                            },
                             icon: const Icon(
                               Icons.search,
                               color: kRHIGGreen,
@@ -135,7 +138,7 @@ class VendorTypeList {
     for (var counter = 0; counter < 10; counter++) {
       vendorTypes.add(
         VendorTypes(
-          iconImage: 'assets/images/TestImage2.png',
+          iconImage: 'assets/images/test_image_2.png',
           name: 'Type ' + (counter + 1).toString(),
         ),
       );
@@ -248,7 +251,7 @@ class VendorList {
 }
 
 class Vendors {
-  String thumbNail = 'assets/images/TestImage1.png';
+  String thumbNail = 'assets/images/test_image_1.png';
   String name;
   String address = '123 main street, near church';
   String phone = '+1 (234)-5678';

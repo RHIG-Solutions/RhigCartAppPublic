@@ -32,68 +32,142 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //TODO: Choose between option 1 - more expensive, but Column height is flex(option 2 lower)
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: Container(
-            height: double.infinity,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20.0),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 120.0,
-                  ),
-                  const Text(
-                    'APP FULL NAME',
-                    style: kMainTitleTextStyle,
-                  ),
-                  const Text(
-                    'Slogan Here',
-                    style: kSloganTextStyle,
-                  ),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  //Notes for Login Screen Form: Wrapped the TextFormFields in Focus
-                  //widgets to allow for the reliable background and elevation changes
-                  //upon focus changes, this broke the auto keyboard display upon next
-                  //field selection on keyboard. Used requestFocus to resolve this.
-                  Form(
-                    key: _loginFormKey,
+          child: LayoutBuilder(
+            builder:
+                (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints:
+                      BoxConstraints(minHeight: viewportConstraints.maxHeight),
+                  child: IntrinsicHeight(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildUsernameTextField(context),
-                        const SizedBox(height: 15.0),
-                        _buildPasswordTextField(context),
+                        const SizedBox(height: 20.0),
+                        Image.asset(
+                          'assets/images/logo.png',
+                          height: 120.0,
+                        ),
+                        const Text(
+                          'APP FULL NAME',
+                          style: kMainTitleTextStyle,
+                        ),
+                        const Text(
+                          'Slogan Here',
+                          style: kSloganTextStyle,
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        //Notes for Login Screen Form: Wrapped the TextFormFields in Focus
+                        //widgets to allow for the reliable background and elevation changes
+                        //upon focus changes, this broke the auto keyboard display upon next
+                        //field selection on keyboard. Used requestFocus to resolve this.
+                        Form(
+                          key: _loginFormKey,
+                          child: Column(
+                            children: [
+                              _buildUsernameTextField(context),
+                              const SizedBox(height: 15.0),
+                              _buildPasswordTextField(context),
+                            ],
+                          ),
+                        ),
+                        _inputPageDivider,
+                        //Forgot password TextButton
+                        _buildForgotPasswordButton(),
+                        const SizedBox(height: 10.0),
+                        //Login ElevatedButton
+                        BuildButton(
+                            title: 'Login',
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/search');
+                            }),
+                        Expanded(
+                          child: Container(
+                            height: 15.0,
+                          ),
+                        ),
+                        _inputPageDivider,
+                        const SizedBox(height: 20.0),
+                        //"Create Account" ElevatedButton
+                        _buildCreateAccountButton(),
+                        const SizedBox(height: kBottomMargin),
                       ],
                     ),
                   ),
-                  _inputPageDivider,
-                  //Forgot password TextButton
-                  _buildForgotPasswordButton(),
-                  //Login ElevatedButton
-                  BuildButton(
-                      title: 'Login',
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/search');
-                      }),
-                  //TODO: Find way to space bottom button while keeping scrolling working
-                  const SizedBox(height: 80.0),
-                  _inputPageDivider,
-                  const SizedBox(height: 20.0),
-                  //"Create Account" ElevatedButton
-                  _buildCreateAccountButton(),
-                  const SizedBox(height: 15.0),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
+      //TODO: Option 2 Less expensive, but not flexible column height
+      // body: SafeArea(
+      //   child: GestureDetector(
+      //     onTap: () => FocusScope.of(context).unfocus(),
+      //     child: Container(
+      //       height: double.infinity,
+      //       child: SingleChildScrollView(
+      //         physics: const AlwaysScrollableScrollPhysics(),
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: [
+      //             const SizedBox(height: 20.0),
+      //             Image.asset(
+      //               'assets/images/logo.png',
+      //               height: 120.0,
+      //             ),
+      //             const Text(
+      //               'APP FULL NAME',
+      //               style: kMainTitleTextStyle,
+      //             ),
+      //             const Text(
+      //               'Slogan Here',
+      //               style: kSloganTextStyle,
+      //             ),
+      //             const SizedBox(
+      //               height: 15.0,
+      //             ),
+      //             //Notes for Login Screen Form: Wrapped the TextFormFields in Focus
+      //             //widgets to allow for the reliable background and elevation changes
+      //             //upon focus changes, this broke the auto keyboard display upon next
+      //             //field selection on keyboard. Used requestFocus to resolve this.
+      //             Form(
+      //               key: _loginFormKey,
+      //               child: Column(
+      //                 children: [
+      //                   _buildUsernameTextField(context),
+      //                   const SizedBox(height: 15.0),
+      //                   _buildPasswordTextField(context),
+      //                 ],
+      //               ),
+      //             ),
+      //             _inputPageDivider,
+      //             //Forgot password TextButton
+      //             _buildForgotPasswordButton(),
+      //             //Login ElevatedButton
+      //             BuildButton(
+      //                 title: 'Login',
+      //                 onPressed: () {
+      //                   Navigator.pushNamed(context, '/search');
+      //                 }),
+      //             const SizedBox(height: 80.0),
+      //             _inputPageDivider,
+      //             const SizedBox(height: 20.0),
+      //             //"Create Account" ElevatedButton
+      //             _buildCreateAccountButton(),
+      //             const SizedBox(height: 15.0),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 
@@ -214,26 +288,27 @@ class _LoginScreenState extends State<LoginScreen> {
     color: kDividerAndUnderlineColour,
   );
 
+  //TODO: Figure out forgot password position issues
   // "Forgot password" button builder
-  Row _buildForgotPasswordButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Padding(
+  SizedBox _buildForgotPasswordButton() {
+    return SizedBox(
+      height: 35.0,
+      width: double.infinity,
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Padding(
+          padding: const EdgeInsets.only(right: kMainEdgeMargin),
           child: TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/forgotpassword');
             },
             child: const Text(
               'Forgot Password?',
-              style: TextStyle(fontSize: 13.0),
+              style: TextStyle(fontSize: 12.0),
             ),
           ),
-          padding: const EdgeInsets.only(
-            right: kMainEdgeMargin,
-          ),
         ),
-      ],
+      ),
     );
   }
 
