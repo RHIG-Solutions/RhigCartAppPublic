@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/constants.dart';
+import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 
 class SearchResultPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class SearchResultPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Search Result'),
       ),
-      body: _mySearchResults.displayResults(),
+      body: _mySearchResults.displayResults(context),
     );
   }
 }
@@ -25,7 +26,7 @@ class _SearchResults {
   final int _numberOfResults = 15;
   final double _resultFieldHeight = 80.0;
   final double _resultFieldPadding = 8.0;
-  final double _imageBorderWidth = 3.0;
+  final double _imageBorderWidth = 2.0;
 
   _SearchResults() {
     for (var counter = 0; counter < _numberOfResults; counter++) {
@@ -33,7 +34,7 @@ class _SearchResults {
           _SearchResultSpecifics(name: 'Name ' + (counter + 1).toString()));
     }
   }
-  Padding displayResults() {
+  Padding displayResults(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
       child: ListView(
@@ -55,40 +56,12 @@ class _SearchResults {
                     padding: EdgeInsets.all(_resultFieldPadding),
                     child: Row(
                       children: [
-                        //Draw Image border
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SizedBox(
-                              width:
-                                  _resultFieldHeight - _resultFieldPadding * 2,
-                              height:
-                                  _resultFieldHeight - _resultFieldPadding * 2,
-                              child: Material(
-                                color: kBackgroundColour,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(_resultFieldHeight -
-                                      _resultFieldPadding * 2),
-                                ),
-                              ),
-                            ),
-                            //Draw Image
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                  (_resultFieldHeight -
-                                          (_resultFieldPadding * 2)) /
-                                      2),
-                              child: Image.asset(
-                                _resultList[counter].image,
-                                width: _resultFieldHeight -
-                                    (_resultFieldPadding + _imageBorderWidth) *
-                                        2,
-                                height: _resultFieldHeight -
-                                    (_resultFieldPadding + _imageBorderWidth) *
-                                        2,
-                              ),
-                            ),
-                          ],
+                        BuildBorderedRoundImage(
+                          image: _resultList[counter].image,
+                          imageSize:
+                              _resultFieldHeight - _resultFieldPadding * 2,
+                          borderWidth: _imageBorderWidth,
+                          borderColour: kBackgroundColour,
                         ),
                         SizedBox(width: _resultFieldPadding),
                         //Draw Search Result Text
@@ -109,7 +82,8 @@ class _SearchResults {
                         ),
                         //Draw Result IconButton
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/store'),
                           icon: const Icon(
                             Icons.arrow_forward_ios,
                             color: kRHIGGrey,

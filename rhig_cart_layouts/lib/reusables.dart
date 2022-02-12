@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rhig_cart_layouts/styles.dart';
 import 'constants.dart';
 
 //Button builder
@@ -39,6 +40,84 @@ class _BuildButtonState extends State<BuildButton> {
         const SizedBox(
           width: kMainEdgeMargin,
         ),
+      ],
+    );
+  }
+}
+
+class BuildBorderedRoundImage extends StatelessWidget {
+  final String image;
+  final double imageSize;
+  final double borderWidth;
+  final Color borderColour;
+  const BuildBorderedRoundImage(
+      {Key? key,
+      required this.image,
+      required this.imageSize,
+      this.borderWidth = 2.0,
+      this.borderColour = Colors.white})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: imageSize,
+          height: imageSize,
+          child: Material(
+            color: borderColour,
+            borderRadius: BorderRadius.all(
+              Radius.circular(imageSize / 2),
+            ),
+          ),
+        ),
+        //Draw Image
+        ClipRRect(
+          borderRadius:
+              BorderRadius.circular((imageSize - (borderWidth * 2)) / 2),
+          child: Image.asset(
+            'assets/images/test_image_2.png',
+            width: imageSize - borderWidth * 2,
+            height: imageSize - borderWidth * 2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+//TODO: Find a way to have half white stars and white stars as empty
+class BuildStarRating extends StatelessWidget {
+  final double _starSize = 18.0;
+  final double starRating;
+  final List<Icon> stars = [];
+  BuildStarRating({Key? key, required this.starRating}) : super(key: key) {
+    for (var counter = 1; counter <= 5; counter++) {
+      if (starRating >= counter) {
+        stars.add(
+          Icon(Icons.star, color: Colors.yellow, size: _starSize),
+        );
+      } else if (starRating - (counter - 1) == 0.5) {
+        stars.add(
+          Icon(Icons.star_half, color: Colors.yellow, size: _starSize),
+        );
+      } else {
+        stars.add(
+          Icon(Icons.star_border, color: Colors.yellow, size: _starSize),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var counter = 0; counter < stars.length; counter++) stars[counter],
+        Text('($starRating)', style: kStarRatingTextStyle),
       ],
     );
   }

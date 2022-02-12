@@ -73,3 +73,8 @@ const kSearchResultBodyTextStyle = TextStyle(
   fontSize: 8,
   fontWeight: FontWeight.bold,
 );
+
+const kStarRatingTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 10,
+);
