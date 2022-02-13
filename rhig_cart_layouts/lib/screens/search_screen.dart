@@ -206,7 +206,7 @@ class VendorList {
               onTap: () {
                 Navigator.pushNamed(context, '/store');
               },
-              child: Container(
+              child: SizedBox(
                 width: 130.0,
                 height: double.infinity,
                 child: Material(

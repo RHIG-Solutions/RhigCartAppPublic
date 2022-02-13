@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                        _inputPageDivider,
+                        BuildDivider().draw(),
                         //Forgot password TextButton
                         _buildForgotPasswordButton(),
                         const SizedBox(height: 10.0),
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 15.0,
                           ),
                         ),
-                        _inputPageDivider,
+                        BuildDivider().draw(),
                         const SizedBox(height: 20.0),
                         //"Create Account" ElevatedButton
                         _buildCreateAccountButton(),
@@ -279,14 +279,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-
-  //Divider builder
-  final Divider _inputPageDivider = const Divider(
-    indent: kMainEdgeMargin,
-    endIndent: kMainEdgeMargin,
-    thickness: 2.0,
-    color: kDividerAndUnderlineColour,
-  );
 
   //TODO: Figure out forgot password position issues
   // "Forgot password" button builder

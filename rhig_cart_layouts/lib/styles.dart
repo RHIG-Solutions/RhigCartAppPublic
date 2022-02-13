@@ -7,7 +7,7 @@ const kRHIGGrey = Color(0xFF686868);
 const kBackgroundColour = Color(0xFFE7E7E7);
 const kSloganColour = Color(0xFF777777);
 const kShadowColour = Color(0xFFFFFFFF);
-const kDividerAndUnderlineColour = Color(0xFFDDDDDD);
+const kDividerAndUnderlineColour = Color(0xFFEEEEEE);
 
 //Text Styles
 const kMainTitleTextStyle = TextStyle(
@@ -76,5 +76,27 @@ const kSearchResultBodyTextStyle = TextStyle(
 
 const kStarRatingTextStyle = TextStyle(
   color: Colors.white,
+  fontSize: 10,
+);
+
+const kProductDetailsBodyTextStyle = TextStyle(
+  color: kRHIGGrey,
+  fontSize: 10,
+);
+
+const kPriceTextStyle = TextStyle(
+  color: kRHIGGreen,
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+);
+
+const kCartNameTextStyle = TextStyle(
+  color: kRHIGGreen,
+  fontSize: 12,
+  fontWeight: FontWeight.bold,
+);
+
+const kCartBodyTextStyle = TextStyle(
+  color: kRHIGGrey,
   fontSize: 10,
 );

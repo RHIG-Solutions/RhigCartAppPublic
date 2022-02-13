@@ -13,7 +13,7 @@ const double kButtonBorderRadius = 10.0;
 const double kButtonHeight = 50.0;
 
 //Bottom Button padding
-const EdgeInsetsGeometry bottomButtonPadding =
+const EdgeInsetsGeometry kBottomButtonPadding =
     EdgeInsets.fromLTRB(0, 15.0, 0, kBottomMargin);
 
 //General Input Field shape and size specifics

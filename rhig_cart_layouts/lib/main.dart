@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rhig_cart_layouts/screens/delivery_method_screen.dart';
+import 'package:rhig_cart_layouts/screens/my_cart_screen.dart';
+import 'package:rhig_cart_layouts/screens/order_summary_screen.dart';
+import 'package:rhig_cart_layouts/screens/product_details_screen.dart';
+import 'package:rhig_cart_layouts/screens/product_item_screen.dart';
 import 'package:rhig_cart_layouts/screens/registration_screen.dart';
 import 'package:rhig_cart_layouts/screens/search_result_screen.dart';
 import 'package:rhig_cart_layouts/screens/search_screen.dart';
@@ -21,6 +26,8 @@ class RHIGCartLayouts extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundColour,
         shadowColor: kShadowColour,
         fontFamily: 'AvinerNext',
+        unselectedWidgetColor: kRHIGGrey,
+        toggleableActiveColor: kRHIGGreen,
         textTheme: const TextTheme(
           bodyText2: TextStyle(color: kRHIGGrey),
         ),
@@ -42,9 +49,8 @@ class RHIGCartLayouts extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               primary: kRHIGGreen, onPrimary: kBackgroundColour),
         ),
-        // inputDecorationTheme: const InputDecorationTheme(
-        //   labelStyle: kFieldLabelTextStyle,
-        // ),
+        // radioTheme:
+        //     RadioThemeData(fillColor: MaterialStateProperty.all(kRHIGGrey))
       ),
       routes: {
         '/': (context) => const SplashScreen(),
@@ -54,8 +60,13 @@ class RHIGCartLayouts extends StatelessWidget {
         '/search': (context) => const SearchPage(),
         '/searchresult': (context) => SearchResultPage(),
         '/store': (context) => const VendorStoreScreen(),
+        '/productitem': (context) => ProductItemScreen(),
+        '/productdetails': (context) => const ProductDetailsScreen(),
+        '/mycart': (context) => const MyCartScreen(),
+        '/deliverymethod': (context) => const DeliveryMethodScreen(),
+        '/ordersummary': (context) => const OrderSummaryScreen(),
       },
-      initialRoute: '/store',
+      initialRoute: '/mycart',
     );
   }
 }

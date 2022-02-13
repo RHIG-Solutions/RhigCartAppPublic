@@ -56,10 +56,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                             child: Row(
                               children: [
                                 const Icon(Icons.tag, color: Colors.white),
-                                Text(
-                                  'Clothing',
-                                  style: _tagTextStyle,
-                                ),
+                                Text('Clothing', style: _tagTextStyle),
                                 const Expanded(child: SizedBox()),
                                 ElevatedButton(
                                   onPressed: () {},
@@ -81,10 +78,8 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                                     children: const [
                                       Icon(Icons.tag,
                                           color: kRHIGGreen, size: 20),
-                                      Text(
-                                        'Add to Favourites',
-                                        style: kSearchResultBodyTextStyle,
-                                      ),
+                                      Text('Add to Favourites',
+                                          style: kSearchResultBodyTextStyle),
                                     ],
                                   ),
                                 )
@@ -104,28 +99,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Material(
-                      elevation: kElevation,
-                      borderRadius: kInputFieldBorderRadius,
-                      color: Colors.white,
-                      child: SizedBox(
-                        height: kSearchBarHeight,
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: 'Search product',
-                            border: InputBorder.none,
-                            prefixIcon: IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/searchresult');
-                              },
-                              icon: const Icon(Icons.search, color: kRHIGGreen),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    _buildSearchBar(context),
                     const SizedBox(height: 15.0),
                     const Text('All Product Categories',
                         style: kGeneralBoldTextStyle),
@@ -134,6 +108,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                   ],
                 ),
               ),
+              //Build Categories List
               Expanded(
                 child: Padding(
                   padding:
@@ -141,11 +116,36 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    child: myCategories.drawCategories(),
+                    child: myCategories.drawCategories(context),
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Material _buildSearchBar(BuildContext context) {
+    return Material(
+      elevation: kElevation,
+      borderRadius: kInputFieldBorderRadius,
+      color: Colors.white,
+      child: SizedBox(
+        height: kSearchBarHeight,
+        width: double.infinity,
+        child: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: 'Search product',
+            border: InputBorder.none,
+            prefixIcon: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/searchresult');
+              },
+              icon: const Icon(Icons.search, color: kRHIGGreen),
+            ),
           ),
         ),
       ),
@@ -177,7 +177,7 @@ class _ProductCategories {
       );
     }
   }
-  Column drawCategories() {
+  Column drawCategories(BuildContext context) {
     return Column(
       children: [
         for (var counter = 0;
@@ -187,14 +187,22 @@ class _ProductCategories {
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Row(
               children: [
-                _drawProductBox(
-                    name: categories[counter].name,
-                    image: categories[counter].image),
+                BuildImageAndTextBox(
+                  image: categories[counter].image,
+                  text: Center(child: Text(categories[counter].name)),
+                  target: () {
+                    Navigator.pushNamed(context, '/productitem');
+                  },
+                ),
                 const SizedBox(width: 15.0),
                 counter + 1 < categories.length
-                    ? _drawProductBox(
-                        name: categories[counter + 1].name,
-                        image: categories[counter + 1].image)
+                    ? BuildImageAndTextBox(
+                        image: categories[counter + 1].image,
+                        text: Center(child: Text(categories[counter + 1].name)),
+                        target: () {
+                          Navigator.pushNamed(context, '/productitem');
+                        },
+                      )
                     : const Expanded(child: SizedBox()),
               ],
             ),
@@ -202,29 +210,6 @@ class _ProductCategories {
       ],
     );
   }
-}
-
-//TODO: Figure out how to display images correctly - use ClipRRect to shape
-Flexible _drawProductBox({required String name, required String image}) {
-  return Flexible(
-    child: Material(
-      color: Colors.white,
-      borderRadius: kInputFieldBorderRadius,
-      child: SizedBox(
-        height: 140.0,
-        width: double.infinity,
-        child: Column(
-          children: [
-            Image.asset(
-              image,
-              height: 90.0,
-            ),
-            Flexible(child: Center(child: Text(name))),
-          ],
-        ),
-      ),
-    ),
-  );
 }
 
 class _ProductCategorySpecifics {

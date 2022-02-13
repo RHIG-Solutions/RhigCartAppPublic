@@ -2,6 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'constants.dart';
 
+//Divider builder
+class BuildDivider {
+  // bool isIndented;
+  // BuildDivider({this.isIndented = true});
+  Divider draw({bool isIndented = true}) {
+    return Divider(
+      indent: isIndented ? kMainEdgeMargin : 0,
+      endIndent: isIndented ? kMainEdgeMargin : 0,
+      thickness: 2.0,
+      color: kDividerAndUnderlineColour,
+    );
+  }
+}
+
 //Button builder
 class BuildButton extends StatefulWidget {
   const BuildButton({Key? key, required this.title, required this.onPressed})
@@ -119,6 +133,43 @@ class BuildStarRating extends StatelessWidget {
         for (var counter = 0; counter < stars.length; counter++) stars[counter],
         Text('($starRating)', style: kStarRatingTextStyle),
       ],
+    );
+  }
+}
+
+//TODO: Figure out how to display images correctly - use ClipRRect to shape
+class BuildImageAndTextBox extends StatelessWidget {
+  final String image;
+  final Widget text;
+  final VoidCallback target;
+  const BuildImageAndTextBox(
+      {Key? key, required this.image, required this.text, required this.target})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: GestureDetector(
+        onTap: target,
+        child: Material(
+          color: Colors.white,
+          elevation: kElevation,
+          borderRadius: kInputFieldBorderRadius,
+          child: SizedBox(
+            height: 140.0,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Image.asset(
+                  image,
+                  height: 90.0,
+                ),
+                Flexible(child: text),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
