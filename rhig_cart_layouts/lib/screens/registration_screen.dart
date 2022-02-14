@@ -32,7 +32,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: Container(
+          child: SizedBox(
             height: double.infinity,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
