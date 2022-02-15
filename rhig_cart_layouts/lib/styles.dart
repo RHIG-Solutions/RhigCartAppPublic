@@ -66,30 +66,3 @@ const kSearchResultBodyTextStyle = TextStyle(
   fontSize: 8,
   fontWeight: FontWeight.bold,
 );
-
-const kStarRatingTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 10,
-);
-
-const kProductDetailsBodyTextStyle = TextStyle(
-  color: kRHIGGrey,
-  fontSize: 10,
-);
-
-const kPriceTextStyle = TextStyle(
-  color: kRHIGGreen,
-  fontSize: 18,
-  fontWeight: FontWeight.bold,
-);
-
-const kCartNameTextStyle = TextStyle(
-  color: kRHIGGreen,
-  fontSize: 12,
-  fontWeight: FontWeight.bold,
-);
-
-const kCartBodyTextStyle = TextStyle(
-  color: kRHIGGrey,
-  fontSize: 10,
-);

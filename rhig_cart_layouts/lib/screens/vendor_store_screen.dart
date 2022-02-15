@@ -97,11 +97,10 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
-
-                  //TODO: Find a tag icon, the one I found is pricey
                   child: Row(
                     children: [
-                      const Icon(Icons.tag, color: Colors.white),
+                      const Icon(Icons.label, color: Colors.white),
+                      //TODO: Sort out tags
                       const Text(
                         'Clothing',
                         style: TextStyle(
@@ -111,29 +110,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                         ),
                       ),
                       const Expanded(child: SizedBox()),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(horizontal: 10.0),
-                          ),
-                        ),
-                        //TODO:Find heart icon
-                        child: Row(
-                          children: const [
-                            Icon(Icons.tag, color: kRHIGGreen, size: 20),
-                            Text('Add to Favourites',
-                                style: kSearchResultBodyTextStyle),
-                          ],
-                        ),
-                      )
+                      _buildFavouriteButton(myCategories)
                     ],
                   ),
                 ),
@@ -146,7 +123,44 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  Material _buildSearchBar(BuildContext context) {
+  ElevatedButton _buildFavouriteButton(_VendorHomeController myCategories) {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          print(myCategories.isFavourite);
+          myCategories.toggleFavourite();
+        });
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+        padding: MaterialStateProperty.all(
+          const EdgeInsets.symmetric(horizontal: 10.0),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+              myCategories.isFavourite
+                  ? Icons.remove_circle_outline
+                  : Icons.add_circle_outline,
+              color: kRHIGGreen,
+              size: 20),
+          Text(
+              myCategories.isFavourite
+                  ? 'Remove from Favourites'
+                  : 'Add to Favourites',
+              style: kSearchResultBodyTextStyle),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar(BuildContext context) {
     return Material(
       elevation: kElevation,
       borderRadius: kInputFieldBorderRadius,
@@ -179,17 +193,24 @@ class _VendorHomeController {
   ImageProvider image = const AssetImage('assets/images/image_missing.png');
   String name;
   double starRating = 0;
+  bool isFavourite = false;
   List<_ProductCategory> categories = [];
+  List<String> tags = [];
   final int _numberOfCategories = 9;
 
   _VendorHomeController({required this.name}) {
-    populate();
+    _populate();
   }
 
   //TODO: Populate Vendor info off the web.
-  populate() {
+  _populate() {
     image = const AssetImage('assets/images/test_image_2.png');
-    starRating = 3.5;
+    starRating = 2.5;
+    isFavourite = true;
+    tags.add('Clothing');
+    tags.add('Casual');
+    tags.add('Adult');
+    tags.add('Male');
     for (var counter = 0; counter < _numberOfCategories; counter++) {
       categories.add(
         _ProductCategory(
@@ -198,6 +219,13 @@ class _VendorHomeController {
         ),
       );
     }
+  }
+
+  //TODO: Add functionality to change favourite status on the database
+  toggleFavourite() {
+    //Toggle does not work atm as the data is not updated in the database on
+    //button press
+    isFavourite = !isFavourite;
   }
 
   //TODO: There is a better way to display these items, look it up

@@ -16,7 +16,7 @@ class OrderSummaryScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: kBottomButtonPadding,
         child: BuildButton(
-          title: 'Proceed to Paymentsssss',
+          title: 'Proceed to Payment',
           onPressed: () {},
         ),
       ),

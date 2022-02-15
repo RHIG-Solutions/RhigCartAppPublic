@@ -80,7 +80,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
       myCart.cartItems[counter].numberOfItems.toString() +
           ' x ' +
           myCart.cartItems[counter].name,
-      style: kCartNameTextStyle,
+      style: TextStyle(
+        color: kRHIGGreen,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }
@@ -95,7 +99,10 @@ Text buildCostRow({required int numberOfItems, required double costPerItem}) {
         f.format(costPerItem).toString() +
         ' = ' +
         f.format(_totalCost).toString(),
-    style: kCartBodyTextStyle,
+    style: TextStyle(
+      color: kRHIGGrey,
+      fontSize: 10,
+    ),
   );
 }
 

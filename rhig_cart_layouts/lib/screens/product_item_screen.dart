@@ -62,7 +62,8 @@ class _ProductController {
                   image: _productList[counter].image,
                   text: Center(child: Text(_productList[counter].name)),
                   target: () {
-                    Navigator.pushNamed(context, '/productdetails');
+                    Navigator.pushNamed(context, '/productdetails',
+                        arguments: _productList[counter].name);
                   },
                 ),
                 const SizedBox(width: 15.0),
@@ -72,7 +73,8 @@ class _ProductController {
                         text:
                             Center(child: Text(_productList[counter + 1].name)),
                         target: () {
-                          Navigator.pushNamed(context, '/productdetails');
+                          Navigator.pushNamed(context, '/productdetails',
+                              arguments: _productList[counter + 1].name);
                         },
                       )
                     : const Expanded(child: SizedBox()),

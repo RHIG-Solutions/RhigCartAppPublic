@@ -129,7 +129,13 @@ class BuildStarRating extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (var counter = 0; counter < stars.length; counter++) stars[counter],
-        Text('($starRating)', style: kStarRatingTextStyle),
+        Text(
+          '($starRating)',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+          ),
+        ),
       ],
     );
   }
