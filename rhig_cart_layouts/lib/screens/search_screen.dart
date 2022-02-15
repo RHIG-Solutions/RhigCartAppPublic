@@ -9,19 +9,23 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
+//TODO:Decide on behaviour when device is turned horizontal. If it overflows the page is useless anyway.
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchTarget = TextEditingController();
 
-  //Temporary Vendor DBs for design purposes
-  VendorTypeList myVendorTypes = VendorTypeList();
-  VendorList myVendors = VendorList();
+  VendorTypeController myVendorTypes = VendorTypeController();
+  VendorController myVendors = VendorController();
 
   @override
   Widget build(BuildContext context) {
+    //Catches the logged in user from the Login Page
+    final String _loggedInUser =
+        ModalRoute.of(context)!.settings.arguments as String;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        //resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Vendor Search'),
         ),
@@ -35,38 +39,11 @@ class _SearchPageState extends State<SearchPage> {
                     width: double.infinity,
                     color: kRHIGGreen,
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
-                    child: Material(
-                      elevation: kElevation,
-                      borderRadius: kInputFieldBorderRadius,
-                      color: Colors.white,
-                      child: Container(
-                        height: kSearchBarHeight,
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _searchTarget,
-                          decoration: InputDecoration(
-                            hintText: 'Search Vendor',
-                            border: InputBorder.none,
-                            prefixIcon: IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/searchresult');
-                              },
-                              icon: const Icon(
-                                Icons.search,
-                                color: kRHIGGreen,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildSearchBar(context),
                 ],
               ),
-              Container(
+              //Draw box for Vendor Types scrollbar
+              SizedBox(
                 height: 70.0,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -82,44 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                     child: Stack(
                       children: [
                         const Center(child: Text('Map goes here')),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            width: double.infinity,
-                            height: 170.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  kBackgroundColour.withOpacity(0.0),
-                                  kBackgroundColour.withOpacity(1),
-                                ],
-                              ),
-                            ),
-                            //color: Colors.red,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.only(left: kMainEdgeMargin),
-                                  child: Text(
-                                    'Nearby Vendors',
-                                    style: kGeneralBoldTextStyle,
-                                  ),
-                                ),
-                                Container(
-                                  height: 140.0,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: myVendors.drawVendors(context),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        _buildNearbyVendorsScrollbar(context),
                       ],
                     ),
                   ),
@@ -131,22 +71,106 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+
+  Padding _buildSearchBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
+      child: Material(
+        elevation: kElevation,
+        borderRadius: kInputFieldBorderRadius,
+        color: Colors.white,
+        child: SizedBox(
+          height: kSearchBarHeight,
+          width: double.infinity,
+          child: TextField(
+            controller: _searchTarget,
+            decoration: InputDecoration(
+              hintText: 'Search Vendor',
+              border: InputBorder.none,
+              prefixIcon: IconButton(
+                onPressed: () {
+                  //TODO: Add search bar functionality
+                  Navigator.pushNamed(context, '/searchresult');
+                },
+                icon: const Icon(
+                  Icons.search,
+                  color: kRHIGGreen,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Align _buildNearbyVendorsScrollbar(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      //Container to fade from map to Nearby Vendors bar
+      child: Container(
+        width: double.infinity,
+        height: 170.0,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              kBackgroundColour.withOpacity(0),
+              kBackgroundColour.withOpacity(1),
+            ],
+          ),
+        ),
+        //color: Colors.red,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: kMainEdgeMargin),
+              child: Text(
+                'Nearby Vendors',
+                style: kGeneralBoldTextStyle,
+              ),
+            ),
+            SizedBox(
+              height: 140.0,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: myVendors.drawVendors(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-//TODO: Replace temporary Vendor lists with actual database access
-class VendorTypeList {
-  List<VendorTypes> vendorTypes = [];
+class VendorTypeController {
+  List<VendorType> vendorTypes = [];
   final double _vendorTypeIconSize = 40.0;
-  VendorTypeList() {
-    for (var counter = 0; counter < 10; counter++) {
+  final int _vendorTypeCount = 10;
+  VendorTypeController() {
+    populate();
+  }
+
+  void populate() {
+    //TODO: Populate list from web service, replacing dummy, alsop get typecount
+    for (var counter = 0; counter < _vendorTypeCount; counter++) {
       vendorTypes.add(
-        VendorTypes(
+        VendorType(
           iconImage: 'assets/images/test_image_2.png',
-          name: 'Type ' + (counter + 1).toString(),
+          type: 'Type ' + (counter + 1).toString(),
         ),
       );
     }
   }
+
+  void filterByType() {
+    //TODO: Apply filters, remove dummy print
+    print('Apply filters');
+  }
+
   Row drawVendorTypes() {
     return Row(
       children: [
@@ -154,24 +178,30 @@ class VendorTypeList {
           Padding(
             padding: EdgeInsets.fromLTRB(
                 counter == 0 ? kMainEdgeMargin : 25, 10, 0, 0),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(_vendorTypeIconSize / 2),
-                  child: Image.asset(
-                    vendorTypes[counter].iconImage,
-                    width: _vendorTypeIconSize,
-                    height: _vendorTypeIconSize,
+            child: GestureDetector(
+              onTap: () {
+                filterByType();
+              },
+              child: Column(
+                children: [
+                  //Draw vendor type image
+                  ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(_vendorTypeIconSize / 2),
+                    child: Image.asset(
+                      vendorTypes[counter].iconImage,
+                      width: _vendorTypeIconSize,
+                      height: _vendorTypeIconSize,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  vendorTypes[counter].name,
-                  style: kNearbyVendorsBodyTextStyle,
-                ),
-              ],
+                  const SizedBox(height: 5.0),
+                  //Draw Vendor Type
+                  Text(
+                    vendorTypes[counter].type,
+                    style: kNearbyVendorsBodyTextStyle,
+                  ),
+                ],
+              ),
             ),
           )
       ],
@@ -179,21 +209,32 @@ class VendorTypeList {
   }
 }
 
-class VendorTypes {
+class VendorType {
   String iconImage;
-  String name;
-  VendorTypes({required this.iconImage, required this.name});
+  String type;
+  VendorType({required this.iconImage, required this.type});
 }
 
-class VendorList {
-  List<Vendors> vendors = [];
-  VendorList() {
-    for (var counter = 0; counter < 10; counter++) {
+class VendorController {
+  List<Vendor> vendors = [];
+  final int _nearbyVendorCount = 10;
+  VendorController() {
+    _populate();
+  }
+
+  void _populate() {
+    //TODO: Populate Vendor list from web source, replacing dummy, also get vendorcount
+    for (var counter = 0; counter < _nearbyVendorCount; counter++) {
       vendors.add(
-        Vendors(name: 'Name ' + (counter + 1).toString()),
+        Vendor(
+            thumbNail: Image.asset('assets/images/image_missing.png'),
+            name: 'Vendor ' + (counter + 1).toString(),
+            address: '123 Main Street, near church',
+            phone: '+1 (234)-4567'),
       );
     }
   }
+
   //TODO Vendor Draw spacing is very inflexible and inelegant, sort it out.
   Row drawVendors(BuildContext context) {
     return Row(
@@ -204,7 +245,8 @@ class VendorList {
                 counter == 0 ? kMainEdgeMargin : 10, 2, 0, 20),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/store');
+                Navigator.pushNamed(context, '/store',
+                    arguments: vendors[counter].name);
               },
               child: SizedBox(
                 width: 130.0,
@@ -214,18 +256,19 @@ class VendorList {
                   borderRadius: BorderRadius.circular(kInputFieldRadius),
                   child: Column(
                     children: [
-                      //TODO: Figure out how to display image properly
-                      ClipRRect(
-                        child: Image.asset(
-                          vendors[counter].thumbNail,
-                          fit: BoxFit.fill,
-                          height: 70.0,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(kInputFieldRadius),
-                          topRight: Radius.circular(kInputFieldRadius),
-                        ),
-                      ),
+                      //TODO: Figure out how to display Vendor Image properly
+                      // ClipRRect(
+                      //   child: vendors[counter].thumbNail,
+                      //   //Image.asset(
+                      //   // vendors[counter].thumbNail,
+                      //   // fit: BoxFit.fill,
+                      //   // height: 70.0,
+                      //   //),
+                      //   borderRadius: const BorderRadius.only(
+                      //     topLeft: Radius.circular(kInputFieldRadius),
+                      //     topRight: Radius.circular(kInputFieldRadius),
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.only(left: 6.0, right: 6.0),
                         child: Column(
@@ -258,10 +301,14 @@ class VendorList {
   }
 }
 
-class Vendors {
-  String thumbNail = 'assets/images/test_image_1.png';
+class Vendor {
+  Image thumbNail;
   String name;
-  String address = '123 main street, near church';
-  String phone = '+1 (234)-5678';
-  Vendors({required this.name});
+  String address;
+  String phone;
+  Vendor(
+      {required this.thumbNail,
+      required this.name,
+      required this.address,
+      required this.phone});
 }

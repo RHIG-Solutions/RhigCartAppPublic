@@ -12,27 +12,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //TODO: Add proper field value handling including disposal etc.
+  //TODO: Verify if TextControllers need disposal.
 
-  final _loginFormKey = GlobalKey<FormState>();
+  //----------
+  //Username and password field specs
+  static const BorderRadiusGeometry _kInputFieldBorderRadius =
+      BorderRadius.only(
+    topRight: Radius.circular(kInputFieldRadius),
+    bottomRight: Radius.circular(kInputFieldRadius),
+  );
 
-  bool _passwordObscured = true;
+  static const EdgeInsetsGeometry _kFieldContentPadding = EdgeInsets.symmetric(
+    horizontal: kMainEdgeMargin,
+    vertical: 10.0,
+  );
+  //----------
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  final _InputPageFieldProperties _usernameFieldProperties =
-      _InputPageFieldProperties();
-  final _InputPageFieldProperties _passwordFieldProperties =
-      _InputPageFieldProperties();
-
-  final FocusNode _usernameNode = FocusNode();
-  final FocusNode _passwordNode = FocusNode();
+  final _LoginProperties _myLogin = _LoginProperties();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO: Choose between option 1 - more expensive, but Column height is flex(option 2 lower)
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -48,27 +48,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 20.0),
-                        Image.asset(
-                          'assets/images/logo.png',
-                          height: 120.0,
-                        ),
+                        Image.asset('assets/images/logo.png', height: 120.0),
                         const Text(
                           'APP FULL NAME',
-                          style: kMainTitleTextStyle,
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            color: kRHIGGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const Text(
                           'Slogan Here',
-                          style: kSloganTextStyle,
+                          style: TextStyle(fontSize: 14.0),
                         ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
+                        const SizedBox(height: 15.0),
                         //Notes for Login Screen Form: Wrapped the TextFormFields in Focus
                         //widgets to allow for the reliable background and elevation changes
                         //upon focus changes, this broke the auto keyboard display upon next
                         //field selection on keyboard. Used requestFocus to resolve this.
                         Form(
-                          key: _loginFormKey,
+                          key: _myLogin._key,
                           child: Column(
                             children: [
                               _buildUsernameTextField(context),
@@ -77,24 +76,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                        BuildDivider().draw(),
-                        //Forgot password TextButton
+                        _buildDivider(),
                         _buildForgotPasswordButton(),
                         const SizedBox(height: 10.0),
-                        //Login ElevatedButton
+                        //Build Login ElevatedButton
                         BuildButton(
                             title: 'Login',
                             onPressed: () {
-                              Navigator.pushNamed(context, '/search');
+                              _myLogin.loginSuccessful()
+                                  ? Navigator.pushNamed(context, '/search',
+                                      arguments: _myLogin.loggedInAccount)
+                                  : FocusScope.of(context)
+                                      .requestFocus(_myLogin._usernameNode);
                             }),
-                        Expanded(
-                          child: Container(
-                            height: 15.0,
-                          ),
-                        ),
-                        BuildDivider().draw(),
+                        Expanded(child: Container(height: 15.0)),
+                        _buildDivider(),
                         const SizedBox(height: 20.0),
-                        //"Create Account" ElevatedButton
                         _buildCreateAccountButton(),
                         const SizedBox(height: kBottomMargin),
                       ],
@@ -106,70 +103,16 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      //TODO: Option 2 Less expensive, but not flexible column height
-      // body: SafeArea(
-      //   child: GestureDetector(
-      //     onTap: () => FocusScope.of(context).unfocus(),
-      //     child: Container(
-      //       height: double.infinity,
-      //       child: SingleChildScrollView(
-      //         physics: const AlwaysScrollableScrollPhysics(),
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: [
-      //             const SizedBox(height: 20.0),
-      //             Image.asset(
-      //               'assets/images/logo.png',
-      //               height: 120.0,
-      //             ),
-      //             const Text(
-      //               'APP FULL NAME',
-      //               style: kMainTitleTextStyle,
-      //             ),
-      //             const Text(
-      //               'Slogan Here',
-      //               style: kSloganTextStyle,
-      //             ),
-      //             const SizedBox(
-      //               height: 15.0,
-      //             ),
-      //             //Notes for Login Screen Form: Wrapped the TextFormFields in Focus
-      //             //widgets to allow for the reliable background and elevation changes
-      //             //upon focus changes, this broke the auto keyboard display upon next
-      //             //field selection on keyboard. Used requestFocus to resolve this.
-      //             Form(
-      //               key: _loginFormKey,
-      //               child: Column(
-      //                 children: [
-      //                   _buildUsernameTextField(context),
-      //                   const SizedBox(height: 15.0),
-      //                   _buildPasswordTextField(context),
-      //                 ],
-      //               ),
-      //             ),
-      //             _inputPageDivider,
-      //             //Forgot password TextButton
-      //             _buildForgotPasswordButton(),
-      //             //Login ElevatedButton
-      //             BuildButton(
-      //                 title: 'Login',
-      //                 onPressed: () {
-      //                   Navigator.pushNamed(context, '/search');
-      //                 }),
-      //             const SizedBox(height: 80.0),
-      //             _inputPageDivider,
-      //             const SizedBox(height: 20.0),
-      //             //"Create Account" ElevatedButton
-      //             _buildCreateAccountButton(),
-      //             const SizedBox(height: 15.0),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
+
+  //Divider builder
+  Divider _buildDivider() => const Divider(
+        thickness: 2.0,
+        color: Color(0xFFDDDDDD),
+        indent: kMainEdgeMargin,
+        endIndent: kMainEdgeMargin,
+      );
 
   //"Username" TextField builder
   Row _buildUsernameTextField(BuildContext context) {
@@ -177,22 +120,23 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Expanded(
           child: Material(
-            color: _usernameFieldProperties.fieldColour,
-            elevation: _usernameFieldProperties.fieldElevation,
+            color: _myLogin._usernameFieldLooks._colour,
+            elevation: _myLogin._usernameFieldLooks._elevation,
             borderRadius: _kInputFieldBorderRadius,
             child: Focus(
               child: TextFormField(
-                focusNode: _usernameNode,
+                focusNode: _myLogin._usernameNode,
                 textInputAction: TextInputAction.next,
-                controller: _usernameController,
+                controller: _myLogin._usernameController,
+                enableSuggestions: false,
                 onFieldSubmitted: (value) {
-                  _usernameController.text = value.toString();
+                  _myLogin._usernameController.text = value.toString();
                   //The following line activates the keyboard for the next field when pressing the
                   //next button in the current field, the default TextInputAction stopped working
                   //after adding the Focus widget
-                  FocusScope.of(context).requestFocus(_passwordNode);
+                  FocusScope.of(context).requestFocus(_myLogin._passwordNode);
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   fillColor: Colors.transparent,
                   filled: true,
                   contentPadding: _kFieldContentPadding,
@@ -200,18 +144,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   labelText: 'Username',
                   //TODO: Add username icon functionality (remove const)
                   labelStyle: kLoginFieldLabelTextStyle,
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     CupertinoIcons.check_mark,
                     size: 18.0,
                     color: kRHIGGreen,
                   ),
+                  errorText:
+                      _myLogin.failed ? 'Username or Password incorrect' : null,
                 ),
               ),
               onFocusChange: (hasFocus) {
                 setState(() {
                   hasFocus
-                      ? _usernameFieldProperties.activateField()
-                      : _usernameFieldProperties.deactivateField();
+                      ? _myLogin._usernameFieldLooks.isFocused()
+                      : _myLogin._usernameFieldLooks.isUnfocused();
                 });
               },
             ),
@@ -228,19 +174,20 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Expanded(
           child: Material(
-            color: _passwordFieldProperties.fieldColour,
-            elevation: _passwordFieldProperties.fieldElevation,
+            color: _myLogin._passwordFieldLooks._colour,
+            elevation: _myLogin._passwordFieldLooks._elevation,
             borderRadius: _kInputFieldBorderRadius,
             child: Focus(
               child: TextFormField(
-                focusNode: _passwordNode,
+                focusNode: _myLogin._passwordNode,
                 textInputAction: TextInputAction.done,
-                controller: _passwordController,
-                obscureText: _passwordObscured,
+                controller: _myLogin._passwordController,
+                enableSuggestions: false,
+                obscureText: _myLogin._passwordObscured,
                 obscuringCharacter: '*',
                 onFieldSubmitted: (value) {
                   setState(() {
-                    _passwordController.text = value.toString();
+                    _myLogin._passwordController.text = value.toString();
                   });
                 },
                 decoration: InputDecoration(
@@ -253,11 +200,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       setState(() {
-                        _passwordObscured = !_passwordObscured;
+                        _myLogin._passwordObscured =
+                            !_myLogin._passwordObscured;
                       });
                     },
                     icon: Icon(
-                      _passwordObscured
+                      _myLogin._passwordObscured
                           ? Icons.visibility_off
                           : Icons.visibility,
                       color: Colors.grey,
@@ -268,8 +216,8 @@ class _LoginScreenState extends State<LoginScreen> {
               onFocusChange: (hasFocus) {
                 setState(() {
                   hasFocus
-                      ? _passwordFieldProperties.activateField()
-                      : _passwordFieldProperties.deactivateField();
+                      ? _myLogin._passwordFieldLooks.isFocused()
+                      : _myLogin._passwordFieldLooks.isUnfocused();
                 });
               },
             ),
@@ -340,29 +288,52 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-//Used for changing input field colour and elevation properties upon focus changes
-class _InputPageFieldProperties {
-  Color fieldColour = kBackgroundColour;
-  double fieldElevation = 0;
+class _LoginProperties {
+  final _key = GlobalKey<FormState>();
 
-  void activateField() {
-    fieldColour = Colors.white;
-    fieldElevation = kElevation;
-  }
+  bool failed = false;
 
-  void deactivateField() {
-    fieldColour = kBackgroundColour;
-    fieldElevation = 0;
+  bool _passwordObscured = true;
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final _LoginFieldLooks _usernameFieldLooks = _LoginFieldLooks();
+  final _LoginFieldLooks _passwordFieldLooks = _LoginFieldLooks();
+
+  final FocusNode _usernameNode = FocusNode();
+  final FocusNode _passwordNode = FocusNode();
+
+  late String loggedInAccount;
+
+  bool loginSuccessful() {
+    bool _success = false;
+    //TODO: Add login check with server here, replacing dummy
+    if (_usernameController.text == 'Correct' &&
+        _passwordController.text == 'Correct') {
+      loggedInAccount = _usernameController.text;
+      failed = false;
+      _success = true;
+    } else {
+      failed = true;
+      _success = false;
+    }
+    return _success;
   }
 }
 
-//Username and password field shape
-const BorderRadiusGeometry _kInputFieldBorderRadius = BorderRadius.only(
-  topRight: Radius.circular(kInputFieldRadius),
-  bottomRight: Radius.circular(kInputFieldRadius),
-);
+//Used for changing input field colour and elevation properties upon focus changes
+class _LoginFieldLooks {
+  Color _colour = kBackgroundColour;
+  double _elevation = 0;
 
-const EdgeInsetsGeometry _kFieldContentPadding = EdgeInsets.symmetric(
-  horizontal: kMainEdgeMargin,
-  vertical: 10.0,
-);
+  void isFocused() {
+    _colour = Colors.white;
+    _elevation = kElevation;
+  }
+
+  void isUnfocused() {
+    _colour = kBackgroundColour;
+    _elevation = 0;
+  }
+}

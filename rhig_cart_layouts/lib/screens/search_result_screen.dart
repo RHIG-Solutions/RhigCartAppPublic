@@ -5,7 +5,7 @@ import 'package:rhig_cart_layouts/styles.dart';
 
 class SearchResultPage extends StatelessWidget {
   SearchResultPage({Key? key}) : super(key: key);
-  final _SearchResults _mySearchResults = _SearchResults();
+  final _SearchResultController _mySearchResults = _SearchResultController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +18,26 @@ class SearchResultPage extends StatelessWidget {
   }
 }
 
-//Dummy search results class - copy out the disPlayResults method for the
-//functionality. To change field size, padding and image border, use the
-//appropriate properties of this class
-class _SearchResults {
-  final List<_SearchResultSpecifics> _resultList = [];
-  final int _numberOfResults = 15;
+class _SearchResultController {
   final double _resultFieldHeight = 80.0;
   final double _resultFieldPadding = 8.0;
   final double _imageBorderWidth = 2.0;
 
-  _SearchResults() {
+  final List<_SearchResult> _resultList = [];
+  final int _numberOfResults = 15;
+  _SearchResultController() {
+    populate();
+  }
+  void populate() {
+    //TODO: Populate search results off the web, and replace dummy populator
     for (var counter = 0; counter < _numberOfResults; counter++) {
-      _resultList.add(
-          _SearchResultSpecifics(name: 'Name ' + (counter + 1).toString()));
+      _resultList.add(_SearchResult(
+          image: const AssetImage('assets/images/test_image_2.png'),
+          name: 'Result ' + (counter + 1).toString(),
+          bodyText: 'This is some body text'));
     }
   }
+
   Padding displayResults(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
@@ -82,8 +86,9 @@ class _SearchResults {
                         ),
                         //Draw Result IconButton
                         IconButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, '/store'),
+                          onPressed: () => Navigator.pushNamed(
+                              context, '/store',
+                              arguments: _resultList[counter].name),
                           icon: const Icon(
                             Icons.arrow_forward_ios,
                             color: kRHIGGrey,
@@ -101,10 +106,10 @@ class _SearchResults {
   }
 }
 
-//Dummy Result specifics class
-class _SearchResultSpecifics {
-  String image = 'assets/images/test_image_2.png';
+class _SearchResult {
+  ImageProvider image;
   String name;
-  String bodyText = 'This is some body text';
-  _SearchResultSpecifics({required this.name});
+  String bodyText;
+  _SearchResult(
+      {required this.image, required this.name, required this.bodyText});
 }

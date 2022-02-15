@@ -3,17 +3,22 @@ import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/constants.dart';
 
 class ProductItemScreen extends StatelessWidget {
-  ProductItemScreen({Key? key}) : super(key: key);
-  final _Products myProducts = _Products();
+  const ProductItemScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String _chosenCategory =
+        ModalRoute.of(context)!.settings.arguments as String;
+    final _ProductController myProducts =
+        _ProductController(category: _chosenCategory);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('T-Shirts'),
+        title: Text(myProducts.category),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(kMainEdgeMargin, 10, kMainEdgeMargin, 0),
+        padding:
+            const EdgeInsets.fromLTRB(kMainEdgeMargin, 10, kMainEdgeMargin, 0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: myProducts.drawProducts(context),
@@ -23,17 +28,26 @@ class ProductItemScreen extends StatelessWidget {
   }
 }
 
-//Dummy Product list - includes the method to draw the product list
-class _Products {
-  final List<_ProductListSpecifics> _productList = [];
+class _ProductController {
+  final String category;
+  final List<_Product> _productList = [];
   final int _numberOfProducts = 13;
-  _Products() {
+  _ProductController({required this.category}) {
+    populate();
+  }
+
+  //TODO: Get product info off web, and replace dummy population method
+  void populate() {
     for (var counter = 0; counter < _numberOfProducts; counter++) {
       _productList.add(
-        _ProductListSpecifics(name: 'Product ' + counter.toString()),
+        _Product(
+            name: 'Product ' + counter.toString(),
+            image: const AssetImage('assets/images/test_image_1.png')),
       );
     }
   }
+
+  //TODO: There is a better way to draw the products, look it up(same as categories)
   Column drawProducts(BuildContext context) {
     return Column(
       children: [
@@ -70,8 +84,8 @@ class _Products {
   }
 }
 
-class _ProductListSpecifics {
-  String image = 'assets/images/test_image_1.png';
+class _Product {
+  ImageProvider image;
   String name;
-  _ProductListSpecifics({required this.name});
+  _Product({required this.image, required this.name});
 }

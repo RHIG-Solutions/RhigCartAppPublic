@@ -18,7 +18,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Delivery Method'),
+        title: const Text('Delivery Method'),
       ),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -78,7 +78,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       child: ListTile(
         title: Text(
           title,
-          style: TextStyle(fontSize: 14.0, color: kRHIGGrey),
+          style: const TextStyle(fontSize: 14.0, color: kRHIGGrey),
         ),
         contentPadding: const EdgeInsets.all(0),
         leading: Transform.scale(

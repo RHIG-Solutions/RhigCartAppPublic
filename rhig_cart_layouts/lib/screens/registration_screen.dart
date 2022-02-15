@@ -11,27 +11,23 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  //TODO: Add proper field value handling including disposal etc.
+  //TODO: Add proper field value handling/validation, including disposal etc.
   //General notes: Page currently set up for two forms, one for personal
   //details, one for address. This can be changed. The page currently feels
   //highly constrained.
-  final _personalDetailsFormKey = GlobalKey<FormState>();
-  final _addressFormKey = GlobalKey<FormState>();
-
-  final _PersonalDetailsFields _details = _PersonalDetailsFields();
-  final _AddressFields _address1 = _AddressFields();
+  _RegistrationController _myRegistration = _RegistrationController();
 
   bool _passwordObscured = true;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registration'),
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Registration'),
+        ),
+        body: SafeArea(
           child: SizedBox(
             height: double.infinity,
             child: SingleChildScrollView(
@@ -78,29 +74,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: kBottomButtonPadding,
-        //TODO: Add proper navigation, currently just popping the screen.
-        child: BuildButton(
-            title: 'Register',
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+        bottomNavigationBar: Padding(
+          padding: kBottomButtonPadding,
+          //TODO: Add proper navigation, currently just popping the screen.
+          child: BuildButton(
+              title: 'Register',
+              onPressed: () {
+                _myRegistration._isSuccessful() ? Navigator.pop(context) : null;
+              }),
+        ),
       ),
     );
   }
 
   Form _buildPersonalDetailsForm() {
     return Form(
-      key: _personalDetailsFormKey,
+      key: _myRegistration._details.key,
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
                 child: TextFormField(
-                  controller: _details.name,
+                  controller: _myRegistration._details.name,
                   textInputAction: TextInputAction.next,
                   autofocus: true,
                   decoration: _inputDecoration(label: 'Name'),
@@ -109,7 +105,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(width: 20.0),
               Expanded(
                 child: TextFormField(
-                  controller: _details.surname,
+                  controller: _myRegistration._details.surname,
                   textInputAction: TextInputAction.next,
                   decoration: _inputDecoration(label: 'Surname'),
                 ),
@@ -117,7 +113,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ],
           ),
           TextFormField(
-            controller: _details.mobileNumber,
+            controller: _myRegistration._details.mobileNumber,
             textInputAction: TextInputAction.next,
             decoration: _inputDecoration(
               label: 'Mobile Number',
@@ -125,7 +121,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ),
           TextFormField(
-            controller: _details.email,
+            controller: _myRegistration._details.email,
             textInputAction: TextInputAction.next,
             decoration: _inputDecoration(
               label: 'Email Address',
@@ -133,7 +129,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ),
           TextFormField(
-            controller: _details.password,
+            controller: _myRegistration._details.password,
             textInputAction: TextInputAction.done,
             decoration: _passwordInputDecoration(label: 'Password'),
             obscureText: _passwordObscured,
@@ -147,7 +143,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Form _buildAddressForm() {
     return Form(
-      key: _addressFormKey,
+      key: _myRegistration._address.key,
       child: Column(
         children: [
           Row(
@@ -155,7 +151,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Expanded(
                 flex: 1,
                 child: TextFormField(
-                  controller: _address1.unit,
+                  controller: _myRegistration._address.unit,
                   textInputAction: TextInputAction.next,
                   decoration: _inputDecoration(label: 'Unit No.'),
                 ),
@@ -164,7 +160,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Expanded(
                 flex: 2,
                 child: TextFormField(
-                  controller: _address1.street,
+                  controller: _myRegistration._address.street,
                   textInputAction: TextInputAction.next,
                   decoration: _inputDecoration(label: 'Street Number & Name'),
                 ),
@@ -176,7 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Expanded(
                 flex: 1,
                 child: TextFormField(
-                  controller: _address1.postalCode,
+                  controller: _myRegistration._address.postalCode,
                   textInputAction: TextInputAction.next,
                   decoration: _inputDecoration(label: 'Postal Code'),
                 ),
@@ -185,7 +181,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Expanded(
                 flex: 2,
                 child: TextFormField(
-                  controller: _address1.suburb,
+                  controller: _myRegistration._address.suburb,
                   textInputAction: TextInputAction.next,
                   decoration: _inputDecoration(label: 'Suburb'),
                 ),
@@ -193,7 +189,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ],
           ),
           TextFormField(
-            controller: _address1.city,
+            controller: _myRegistration._address.city,
             textInputAction: TextInputAction.done,
             decoration: _inputDecoration(
               label: 'City',
@@ -246,7 +242,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 }
 
+class _RegistrationController {
+  final _PersonalDetailsFields _details = _PersonalDetailsFields();
+  final _AddressFields _address = _AddressFields();
+  bool _isSuccessful() {
+    //TODO: Add registration confirmation functionality
+    return true;
+  }
+}
+
 class _PersonalDetailsFields {
+  final key = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
   TextEditingController surname = TextEditingController();
   TextEditingController mobileNumber = TextEditingController();
@@ -255,6 +261,7 @@ class _PersonalDetailsFields {
 }
 
 class _AddressFields {
+  final key = GlobalKey<FormState>();
   TextEditingController unit = TextEditingController();
   TextEditingController street = TextEditingController();
   TextEditingController suburb = TextEditingController();

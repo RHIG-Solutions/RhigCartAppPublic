@@ -10,16 +10,11 @@ const kShadowColour = Color(0xFFFFFFFF);
 const kDividerAndUnderlineColour = Color(0xFFEEEEEE);
 
 //Text Styles
-const kMainTitleTextStyle = TextStyle(
-  fontSize: 22.0,
-  color: kRHIGGreen,
-  fontWeight: FontWeight.bold,
-);
 
+//----------------
 //TODO: Decide on label text styles. Currently not the same across pages.
 //Each page is currently being defined on that page, if a unified size can be
 //decided upon, move it to Theme.
-
 const kLoginFieldLabelTextStyle = TextStyle(
   fontSize: 17.0,
   color: kRHIGGreen,
@@ -29,10 +24,7 @@ const kRegistrationFieldLabelTextStyle = TextStyle(
   fontSize: 13.0,
   color: kRHIGGreen,
 );
-
-const kSloganTextStyle = TextStyle(
-  fontSize: 14.0,
-);
+//--------------
 
 const kAppBarTextStyle = TextStyle(
   fontSize: 20.0,
@@ -62,6 +54,7 @@ const kNearbyVendorsBodyTextStyle = TextStyle(
   fontSize: 6.5,
   fontWeight: FontWeight.bold,
 );
+
 const kSearchResultNameTextStyle = TextStyle(
   color: kRHIGGreen,
   fontSize: 14.0,

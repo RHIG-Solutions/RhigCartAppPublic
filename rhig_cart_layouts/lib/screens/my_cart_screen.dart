@@ -55,7 +55,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           ),
                         ],
                       ),
-                      BuildDivider().draw(isIndented: false),
+                      const Divider(thickness: 2.0, color: Color(0xFFCCCCCC)),
                     ],
                   )
               ],

@@ -18,6 +18,8 @@ void main() => runApp(const RHIGCartLayouts());
 class RHIGCartLayouts extends StatelessWidget {
   const RHIGCartLayouts({Key? key}) : super(key: key);
 
+  //TODO: Replace missing image default with proper image.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,8 +51,6 @@ class RHIGCartLayouts extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               primary: kRHIGGreen, onPrimary: kBackgroundColour),
         ),
-        // radioTheme:
-        //     RadioThemeData(fillColor: MaterialStateProperty.all(kRHIGGrey))
       ),
       routes: {
         '/': (context) => const SplashScreen(),
@@ -66,7 +66,7 @@ class RHIGCartLayouts extends StatelessWidget {
         '/deliverymethod': (context) => const DeliveryMethodScreen(),
         '/ordersummary': (context) => const OrderSummaryScreen(),
       },
-      initialRoute: '/mycart',
+      initialRoute: '/login',
     );
   }
 }
