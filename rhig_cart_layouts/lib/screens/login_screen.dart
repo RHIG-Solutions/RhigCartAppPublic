@@ -83,11 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         BuildButton(
                             title: 'Login',
                             onPressed: () {
-                              _myLogin.loginSuccessful()
-                                  ? Navigator.pushNamed(context, '/search',
-                                      arguments: _myLogin.loggedInAccount)
-                                  : FocusScope.of(context)
-                                      .requestFocus(_myLogin._usernameNode);
+                              setState(() {
+                                _myLogin.loginSuccessful()
+                                    ? Navigator.pushNamed(context, '/search',
+                                        arguments: _myLogin.loggedInAccount)
+                                    : FocusScope.of(context)
+                                        .requestFocus(_myLogin._usernameNode);
+                              });
                             }),
                         Expanded(child: Container(height: 15.0)),
                         _buildDivider(),

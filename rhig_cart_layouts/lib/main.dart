@@ -60,7 +60,7 @@ class RHIGCartLayouts extends StatelessWidget {
         '/search': (context) => const SearchPage(),
         '/searchresult': (context) => SearchResultPage(),
         '/store': (context) => const VendorStoreScreen(),
-        '/productitem': (context) => ProductItemScreen(),
+        '/productitem': (context) => const ProductItemScreen(),
         '/productdetails': (context) => const ProductDetailsScreen(),
         '/mycart': (context) => const MyCartScreen(),
         '/deliverymethod': (context) => const DeliveryMethodScreen(),

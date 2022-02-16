@@ -25,7 +25,6 @@ class _SearchPageState extends State<SearchPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        //resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Vendor Search'),
         ),
@@ -227,7 +226,7 @@ class VendorController {
     for (var counter = 0; counter < _nearbyVendorCount; counter++) {
       vendors.add(
         Vendor(
-            thumbNail: Image.asset('assets/images/image_missing.png'),
+            thumbNail: AssetImage('assets/images/test_image_1.png'),
             name: 'Vendor ' + (counter + 1).toString(),
             address: '123 Main Street, near church',
             phone: '+1 (234)-4567'),
@@ -235,8 +234,8 @@ class VendorController {
     }
   }
 
-  //TODO Vendor Draw spacing is very inflexible and inelegant, sort it out.
-  Row drawVendors(BuildContext context) {
+  Widget drawVendors(BuildContext context) {
+    double _boxWidth = 130.0;
     return Row(
       children: [
         for (var counter = 0; counter < vendors.length; counter++)
@@ -248,50 +247,47 @@ class VendorController {
                 Navigator.pushNamed(context, '/store',
                     arguments: vendors[counter].name);
               },
-              child: SizedBox(
-                width: 130.0,
-                height: double.infinity,
-                child: Material(
-                  elevation: kElevation,
-                  borderRadius: BorderRadius.circular(kInputFieldRadius),
-                  child: Column(
-                    children: [
-                      //TODO: Figure out how to display Vendor Image properly
-                      // ClipRRect(
-                      //   child: vendors[counter].thumbNail,
-                      //   //Image.asset(
-                      //   // vendors[counter].thumbNail,
-                      //   // fit: BoxFit.fill,
-                      //   // height: 70.0,
-                      //   //),
-                      //   borderRadius: const BorderRadius.only(
-                      //     topLeft: Radius.circular(kInputFieldRadius),
-                      //     topRight: Radius.circular(kInputFieldRadius),
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6.0, right: 6.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              vendors[counter].name,
-                              textAlign: TextAlign.left,
-                              style: kNearbyVendorsNameTextStyle,
-                            ),
-                            Text(
-                              vendors[counter].address,
-                              style: kNearbyVendorsBodyTextStyle,
-                            ),
-                            Text(
-                              vendors[counter].phone,
-                              style: kNearbyVendorsBodyTextStyle,
-                            )
-                          ],
+              child: Material(
+                elevation: kElevation,
+                borderRadius: kInputFieldBorderRadius,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 70.0,
+                      width: _boxWidth,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: vendors[counter].thumbNail,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(kInputFieldRadius),
+                          topRight: Radius.circular(kInputFieldRadius),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            vendors[counter].name,
+                            textAlign: TextAlign.left,
+                            style: kNearbyVendorsNameTextStyle,
+                          ),
+                          Text(
+                            vendors[counter].address,
+                            style: kNearbyVendorsBodyTextStyle,
+                          ),
+                          Text(
+                            vendors[counter].phone,
+                            style: kNearbyVendorsBodyTextStyle,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -302,7 +298,7 @@ class VendorController {
 }
 
 class Vendor {
-  Image thumbNail;
+  ImageProvider thumbNail;
   String name;
   String address;
   String phone;

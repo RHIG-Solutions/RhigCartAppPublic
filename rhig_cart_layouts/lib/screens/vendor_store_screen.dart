@@ -12,6 +12,18 @@ class VendorStoreScreen extends StatefulWidget {
 
 //TODO: Screen breaks when going horizontal
 class _VendorStoreScreenState extends State<VendorStoreScreen> {
+  final TextStyle _vendorNameTextStyle = const TextStyle(
+    fontSize: 15.0,
+    fontWeight: FontWeight.bold,
+    color: kBackgroundColour,
+  );
+
+  final TextStyle _vendorTagsTextStyle = const TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.bold,
+    color: kBackgroundColour,
+  );
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -30,7 +42,10 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              _buildTitleBlock(myCategories),
+              //TODO: move orientation detection to title block builder and make two builds.
+              MediaQuery.of(context).orientation == Orientation.portrait
+                  ? _buildPortraitTitleBlock(myCategories)
+                  : _buildLandscapeTitleBlock(myCategories),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
                     kMainEdgeMargin, 10, kMainEdgeMargin, 0),
@@ -46,18 +61,8 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                   ],
                 ),
               ),
-              //Build Categories List
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: myCategories.drawCategories(context),
-                  ),
-                ),
-              ),
+
+              myCategories.drawCategories(context),
             ],
           ),
         ),
@@ -65,7 +70,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  Container _buildTitleBlock(_VendorHomeController myCategories) {
+  Container _buildPortraitTitleBlock(_VendorHomeController myCategories) {
     return Container(
       width: double.infinity,
       color: kRHIGGreen,
@@ -85,11 +90,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                 const SizedBox(height: 5.0),
                 Text(
                   myCategories.name.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: kBackgroundColour,
-                  ),
+                  style: _vendorNameTextStyle,
                 ),
                 const SizedBox(height: 5.0),
                 BuildStarRating(starRating: myCategories.starRating),
@@ -101,14 +102,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                     children: [
                       const Icon(Icons.label, color: Colors.white),
                       //TODO: Sort out tags
-                      const Text(
-                        'Clothing',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                          color: kBackgroundColour,
-                        ),
-                      ),
+                      Text('Clothing', style: _vendorTagsTextStyle),
                       const Expanded(child: SizedBox()),
                       _buildFavouriteButton(myCategories)
                     ],
@@ -123,11 +117,52 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
+  Container _buildLandscapeTitleBlock(_VendorHomeController myCategories) {
+    //TODO: WIP, layout will change once decision is made on tags
+    return Container(
+      width: double.infinity,
+      color: kRHIGGreen,
+      child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Stack(
+            children: [
+              const BackButton(color: Colors.white),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BuildBorderedRoundImage(
+                    image: myCategories.image,
+                    imageSize: 80,
+                    borderWidth: 1.0,
+                  ),
+                  const SizedBox(width: 15.0),
+                  Column(
+                    children: [
+                      Text(
+                        myCategories.name.toUpperCase(),
+                        style: _vendorNameTextStyle,
+                      ),
+                      const SizedBox(height: 5.0),
+                      BuildStarRating(starRating: myCategories.starRating),
+                    ],
+                  ),
+                  const SizedBox(width: 15.0),
+                  const Icon(Icons.label, color: Colors.white),
+                  //TODO: Sort out tags
+                  Text('Clothing', style: _vendorTagsTextStyle),
+                  const SizedBox(width: 15.0),
+                  _buildFavouriteButton(myCategories)
+                ],
+              ),
+            ],
+          )),
+    );
+  }
+
   ElevatedButton _buildFavouriteButton(_VendorHomeController myCategories) {
     return ElevatedButton(
       onPressed: () {
         setState(() {
-          print(myCategories.isFavourite);
           myCategories.toggleFavourite();
         });
       },
@@ -194,7 +229,7 @@ class _VendorHomeController {
   String name;
   double starRating = 0;
   bool isFavourite = false;
-  List<_ProductCategory> categories = [];
+  List<GridListItem> categories = [];
   List<String> tags = [];
   final int _numberOfCategories = 9;
 
@@ -213,8 +248,8 @@ class _VendorHomeController {
     tags.add('Male');
     for (var counter = 0; counter < _numberOfCategories; counter++) {
       categories.add(
-        _ProductCategory(
-          name: 'Category ' + (counter + 1).toString(),
+        GridListItem(
+          description: 'Category ' + (counter + 1).toString(),
           image: const AssetImage('assets/images/test_image_1.png'),
         ),
       );
@@ -228,47 +263,28 @@ class _VendorHomeController {
     isFavourite = !isFavourite;
   }
 
-  //TODO: There is a better way to display these items, look it up
-  Column drawCategories(BuildContext context) {
-    return Column(
-      children: [
-        for (var counter = 0;
-            counter < categories.length;
-            counter = counter + 2)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 15.0),
-            child: Row(
-              children: [
-                BuildImageAndTextBox(
+  Widget drawCategories(BuildContext context) {
+    //TODO: Decide on fixed vs flex boxes, switch to the following if fixed is chosen(remember to do reusables as well)
+    // return Build2DGrid(
+    //   myList: categories,
+    //   target: '/productitem',
+    // );
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
+        child: GridView.extent(
+          maxCrossAxisExtent: 150.0,
+          mainAxisSpacing: 15.0,
+          crossAxisSpacing: 15.0,
+          children: [
+            for (var counter = 0; counter < categories.length; counter++)
+              BuildImageAndTextBox(
+                  description: categories[counter].description,
                   image: categories[counter].image,
-                  text: Center(child: Text(categories[counter].name)),
-                  target: () {
-                    Navigator.pushNamed(context, '/productitem',
-                        arguments: categories[counter].name);
-                  },
-                ),
-                const SizedBox(width: 15.0),
-                counter + 1 < categories.length
-                    ? BuildImageAndTextBox(
-                        image: categories[counter + 1].image,
-                        text: Center(child: Text(categories[counter + 1].name)),
-                        target: () {
-                          Navigator.pushNamed(context, '/productitem',
-                              arguments: categories[counter + 1].name);
-                        },
-                      )
-                    : const Expanded(child: SizedBox()),
-              ],
-            ),
-          ),
-      ],
+                  target: '/productitem'),
+          ],
+        ),
+      ),
     );
   }
-}
-
-class _ProductCategory {
-  ImageProvider image;
-  String name;
-
-  _ProductCategory({required this.image, required this.name});
 }

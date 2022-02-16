@@ -15,7 +15,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   //General notes: Page currently set up for two forms, one for personal
   //details, one for address. This can be changed. The page currently feels
   //highly constrained.
-  _RegistrationController _myRegistration = _RegistrationController();
+  final _RegistrationController _myRegistration = _RegistrationController();
 
   bool _passwordObscured = true;
 

@@ -2,20 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'constants.dart';
 
-// //Divider builder
-// class BuildDivider {
-//   // bool isIndented;
-//   // BuildDivider({this.isIndented = true});
-//   Divider draw({bool isIndented = true}) {
-//     return Divider(
-//       indent: isIndented ? kMainEdgeMargin : 0,
-//       endIndent: isIndented ? kMainEdgeMargin : 0,
-//       thickness: 2.0,
-//       color: kDividerAndUnderlineColour,
-//     );
-//   }
-// }
-
 //Button builder
 class BuildButton extends StatefulWidget {
   const BuildButton({Key? key, required this.title, required this.onPressed})
@@ -131,7 +117,7 @@ class BuildStarRating extends StatelessWidget {
         for (var counter = 0; counter < stars.length; counter++) stars[counter],
         Text(
           '($starRating)',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 10,
           ),
@@ -142,11 +128,11 @@ class BuildStarRating extends StatelessWidget {
 }
 
 //TODO: Figure out how to display images correctly - use ClipRRect to shape
-class BuildImageAndTextBox extends StatelessWidget {
+class BuildOldImageAndTextBox extends StatelessWidget {
   final ImageProvider image;
   final Widget text;
   final VoidCallback target;
-  const BuildImageAndTextBox(
+  const BuildOldImageAndTextBox(
       {Key? key, required this.image, required this.text, required this.target})
       : super(key: key);
 
@@ -178,45 +164,152 @@ class BuildImageAndTextBox extends StatelessWidget {
   }
 }
 
-// class BuildBorderedRoundImage extends StatelessWidget {
-//   final String image;
-//   final double imageSize;
-//   final double borderWidth;
-//   final Color borderColour;
-//   const BuildBorderedRoundImage(
-//       {Key? key,
-//         required this.image,
-//         required this.imageSize,
-//         this.borderWidth = 2.0,
-//         this.borderColour = Colors.white})
-//       : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       alignment: Alignment.center,
-//       children: [
-//         SizedBox(
-//           width: imageSize,
-//           height: imageSize,
-//           child: Material(
-//             color: borderColour,
-//             borderRadius: BorderRadius.all(
-//               Radius.circular(imageSize / 2),
-//             ),
-//           ),
-//         ),
-//         //Draw Image
-//         ClipRRect(
-//           borderRadius:
-//           BorderRadius.circular((imageSize - (borderWidth * 2)) / 2),
-//           child: Image.asset(
-//             'assets/images/test_image_2.png',
-//             width: imageSize - borderWidth * 2,
-//             height: imageSize - borderWidth * 2,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+class BuildImageAndTextBox extends StatelessWidget {
+  const BuildImageAndTextBox(
+      {Key? key,
+      required this.description,
+      required this.image,
+      required this.target})
+      : super(key: key);
+  final String target;
+  final String description;
+  final ImageProvider image;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, target, arguments: description);
+      },
+      child: Material(
+        elevation: kElevation,
+        borderRadius: kInputFieldBorderRadius,
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: image,
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(kInputFieldRadius),
+                    topRight: Radius.circular(kInputFieldRadius),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: Center(
+                child: Text(description),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//TODO:Decide on flex size or fixed size boxes, delete the following if flex
+//----------
+class Build2DGrid extends StatelessWidget {
+  final List<GridListItem> myList;
+  final String target;
+  final double minPadding = 15.0;
+  final double childheight = 100.0;
+  final double childwidth = 130.0;
+  const Build2DGrid({Key? key, required this.myList, required this.target})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //Preparation calculations to get child numbers
+    int numberOfChildrenPerRow;
+    double spaceRemaining =
+        MediaQuery.of(context).size.width - (kMainEdgeMargin * 2);
+    for (numberOfChildrenPerRow = 0;
+        spaceRemaining >= childwidth;
+        numberOfChildrenPerRow++) {
+      spaceRemaining = spaceRemaining - (childwidth + minPadding);
+    }
+
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              for (var y = 0; y < myList.length; y = y + numberOfChildrenPerRow)
+                Padding(
+                  padding: EdgeInsets.only(bottom: minPadding),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (var x = 0; x < numberOfChildrenPerRow; x++)
+                        x + y < myList.length
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, target,
+                                      arguments: myList[x + y].description);
+                                },
+                                child: Material(
+                                  elevation: kElevation,
+                                  borderRadius: kInputFieldBorderRadius,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: childheight / 3 * 2,
+                                        width: childwidth,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: myList[x + y].image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(
+                                                kInputFieldRadius),
+                                            topRight: Radius.circular(
+                                                kInputFieldRadius),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: childwidth,
+                                        height: childheight / 3,
+                                        child: Center(
+                                          child:
+                                              Text(myList[x + y].description),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : SizedBox(width: childwidth)
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//----------
+
+//Class to hold list of item information to populate Grid views
+class GridListItem {
+  ImageProvider image;
+  String description;
+
+  GridListItem({required this.image, required this.description});
+}
