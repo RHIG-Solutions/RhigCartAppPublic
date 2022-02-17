@@ -21,23 +21,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Forgot Password')),
-      body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text('Fill in an OTP to reset password'),
-            const SizedBox(height: 30.0),
-            //Row of 4 OTP Fields
-            _buildOTPFields(context),
-            const SizedBox(height: 20.0),
-            Text(
-              _myOTP._isIncorrect ? 'OTP Incorrect' : '',
-              style: const TextStyle(color: Colors.red),
-            ),
-            _buildResendButton()
-          ],
+      body: Center(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text('Fill in an OTP to reset password'),
+              const SizedBox(height: 30.0),
+              //Row of 4 OTP Fields
+              _buildOTPFields(context),
+              const SizedBox(height: 20.0),
+              Text(
+                _myOTP._isIncorrect ? 'OTP Incorrect' : '',
+                style: const TextStyle(color: Colors.red),
+              ),
+              _buildResendButton()
+            ],
+          ),
         ),
       ),
     );

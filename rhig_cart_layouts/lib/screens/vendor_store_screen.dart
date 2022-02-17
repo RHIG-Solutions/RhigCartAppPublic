@@ -42,7 +42,6 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              //TODO: move orientation detection to title block builder and make two builds.
               MediaQuery.of(context).orientation == Orientation.portrait
                   ? _buildPortraitTitleBlock(myCategories)
                   : _buildLandscapeTitleBlock(myCategories),
@@ -61,7 +60,6 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                   ],
                 ),
               ),
-
               myCategories.drawCategories(context),
             ],
           ),
@@ -101,7 +99,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
                   child: Row(
                     children: [
                       const Icon(Icons.label, color: Colors.white),
-                      //TODO: Sort out tags
+                      //TODO: Sort out tags, how many can there be?
                       Text('Clothing', style: _vendorTagsTextStyle),
                       const Expanded(child: SizedBox()),
                       _buildFavouriteButton(myCategories)

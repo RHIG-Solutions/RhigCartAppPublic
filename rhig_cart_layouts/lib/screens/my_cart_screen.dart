@@ -109,11 +109,11 @@ Text buildCostRow({required int numberOfItems, required double costPerItem}) {
 //Dummy Cart class with 3 items, cannot add more just remove. Has VERY basic
 //functionality for interface testing
 class CartController {
-  List<_CartSpecifics> cartItems = [];
+  List<_CartItem> cartItems = [];
   double totalCost = 0.0;
   CartController() {
     for (var counter = 0; counter < 3; counter++) {
-      cartItems.add(_CartSpecifics(name: 'Item ' + (counter + 1).toString()));
+      cartItems.add(_CartItem(name: 'Item ' + (counter + 1).toString()));
       totalCost = totalCost + cartItems[counter].costPerItem;
     }
   }
@@ -136,10 +136,10 @@ class CartController {
   }
 }
 
-class _CartSpecifics {
+class _CartItem {
   String image = 'assets/images/test_image_1.png';
   String name;
   int numberOfItems = 1;
   double costPerItem = 20.00;
-  _CartSpecifics({required this.name});
+  _CartItem({required this.name});
 }
