@@ -163,6 +163,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         setState(() {
           _myOTP._resend();
           _myOTP._reset();
+          _myOTP._isIncorrect = false;
           FocusScope.of(context)
               .requestFocus(_myOTP.field[_myOTP._activeNode].node);
         });

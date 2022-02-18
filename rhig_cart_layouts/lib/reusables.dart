@@ -1,6 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:rhig_cart_layouts/constants.dart';
+import 'package:rhig_cart_layouts/models.dart';
 import 'package:rhig_cart_layouts/styles.dart';
-import 'constants.dart';
+
+Divider buildDividerLight() =>
+    const Divider(thickness: 2.0, color: Color(0xFFEEEEEE));
+
+class BuildOutlinedButton extends StatelessWidget {
+  final String name;
+  final String target;
+  final String arguments;
+  const BuildOutlinedButton(
+      {Key? key, required this.name, required this.target, this.arguments = ''})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40.0,
+      child: OutlinedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, target, arguments: arguments);
+        },
+        child: Text(name),
+        style: ElevatedButton.styleFrom(
+          textStyle: const TextStyle(fontSize: 12.0),
+          onPrimary: kRHIGGreen,
+          primary: Colors.white,
+          fixedSize: const Size(
+            double.infinity,
+            kButtonHeight,
+          ),
+          side: const BorderSide(
+            color: kRHIGGreen,
+            width: 2.0,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              kButtonBorderRadius,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 //Button builder
 class BuildButton extends StatefulWidget {
@@ -90,8 +134,12 @@ class BuildBorderedRoundImage extends StatelessWidget {
 class BuildStarRating extends StatelessWidget {
   final double _starSize = 18.0;
   final double starRating;
+  final Color ratingColor;
   final List<Icon> stars = [];
-  BuildStarRating({Key? key, required this.starRating}) : super(key: key) {
+
+  BuildStarRating(
+      {Key? key, required this.starRating, this.ratingColor = Colors.white})
+      : super(key: key) {
     for (var counter = 1; counter <= 5; counter++) {
       if (starRating >= counter) {
         stars.add(
@@ -117,8 +165,8 @@ class BuildStarRating extends StatelessWidget {
         for (var counter = 0; counter < stars.length; counter++) stars[counter],
         Text(
           '($starRating)',
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: ratingColor,
             fontSize: 10,
           ),
         ),
@@ -305,11 +353,3 @@ class Build2DGrid extends StatelessWidget {
 }
 
 //----------
-
-//Class to hold list of item information to populate Grid views
-class GridListItem {
-  ImageProvider image;
-  String description;
-
-  GridListItem({required this.image, required this.description});
-}

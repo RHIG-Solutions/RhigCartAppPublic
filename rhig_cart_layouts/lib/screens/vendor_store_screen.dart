@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'package:rhig_cart_layouts/constants.dart';
+import 'package:rhig_cart_layouts/models.dart';
 
 class VendorStoreScreen extends StatefulWidget {
   const VendorStoreScreen({Key? key}) : super(key: key);
@@ -30,8 +31,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
   Widget build(BuildContext context) {
     final String _chosenVendor =
         ModalRoute.of(context)!.settings.arguments as String;
-    final _VendorHomeController myCategories =
-        _VendorHomeController(name: _chosenVendor);
+    final VendorModel myCategories = VendorModel(name: _chosenVendor);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -68,7 +68,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  Container _buildPortraitTitleBlock(_VendorHomeController myCategories) {
+  Container _buildPortraitTitleBlock(VendorModel myCategories) {
     return Container(
       width: double.infinity,
       color: kRHIGGreen,
@@ -115,7 +115,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  Container _buildLandscapeTitleBlock(_VendorHomeController myCategories) {
+  Container _buildLandscapeTitleBlock(VendorModel myCategories) {
     //TODO: WIP, layout will change once decision is made on tags
     return Container(
       width: double.infinity,
@@ -157,7 +157,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  ElevatedButton _buildFavouriteButton(_VendorHomeController myCategories) {
+  ElevatedButton _buildFavouriteButton(VendorModel myCategories) {
     return ElevatedButton(
       onPressed: () {
         setState(() {
@@ -214,73 +214,6 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
               icon: const Icon(Icons.search, color: kRHIGGreen),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-//Dummy Product Category list with drawing methods
-
-class _VendorHomeController {
-  ImageProvider image = const AssetImage('assets/images/image_missing.png');
-  String name;
-  double starRating = 0;
-  bool isFavourite = false;
-  List<GridListItem> categories = [];
-  List<String> tags = [];
-  final int _numberOfCategories = 9;
-
-  _VendorHomeController({required this.name}) {
-    _populate();
-  }
-
-  //TODO: Populate Vendor info off the web.
-  _populate() {
-    image = const AssetImage('assets/images/test_image_2.png');
-    starRating = 2.5;
-    isFavourite = true;
-    tags.add('Clothing');
-    tags.add('Casual');
-    tags.add('Adult');
-    tags.add('Male');
-    for (var counter = 0; counter < _numberOfCategories; counter++) {
-      categories.add(
-        GridListItem(
-          description: 'Category ' + (counter + 1).toString(),
-          image: const AssetImage('assets/images/test_image_1.png'),
-        ),
-      );
-    }
-  }
-
-  //TODO: Add functionality to change favourite status on the database
-  toggleFavourite() {
-    //Toggle does not work atm as the data is not updated in the database on
-    //button press
-    isFavourite = !isFavourite;
-  }
-
-  Widget drawCategories(BuildContext context) {
-    //TODO: Decide on fixed vs flex boxes, switch to the following if fixed is chosen(remember to do reusables as well)
-    // return Build2DGrid(
-    //   myList: categories,
-    //   target: '/productitem',
-    // );
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kMainEdgeMargin),
-        child: GridView.extent(
-          maxCrossAxisExtent: 150.0,
-          mainAxisSpacing: 15.0,
-          crossAxisSpacing: 15.0,
-          children: [
-            for (var counter = 0; counter < categories.length; counter++)
-              BuildImageAndTextBox(
-                  description: categories[counter].description,
-                  image: categories[counter].image,
-                  target: '/productitem'),
-          ],
         ),
       ),
     );

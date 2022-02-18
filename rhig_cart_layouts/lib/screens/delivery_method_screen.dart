@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/constants.dart';
 import 'package:rhig_cart_layouts/styles.dart';
+import 'package:rhig_cart_layouts/models.dart';
 
 class DeliveryMethodScreen extends StatefulWidget {
   const DeliveryMethodScreen({Key? key}) : super(key: key);
@@ -9,8 +10,6 @@ class DeliveryMethodScreen extends StatefulWidget {
   @override
   _DeliveryMethodScreenState createState() => _DeliveryMethodScreenState();
 }
-
-enum DeliveryMethod { door2door, pickup, collect }
 
 class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
   DeliveryMethod? _deliveryMethod = DeliveryMethod.door2door;

@@ -13,8 +13,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchTarget = TextEditingController();
 
-  VendorTypeController myVendorTypes = VendorTypeController();
-  VendorController myVendors = VendorController();
+  _VendorTypeController myVendorTypes = _VendorTypeController();
+  _VendorController myVendors = _VendorController();
 
   @override
   Widget build(BuildContext context) {
@@ -145,11 +145,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-class VendorTypeController {
-  List<VendorType> vendorTypes = [];
+class _VendorTypeController {
+  List<_VendorType> vendorTypes = [];
   final double _vendorTypeIconSize = 40.0;
   final int _vendorTypeCount = 10;
-  VendorTypeController() {
+  _VendorTypeController() {
     populate();
   }
 
@@ -157,7 +157,7 @@ class VendorTypeController {
     //TODO: Populate list from web service, replacing dummy, alsop get typecount
     for (var counter = 0; counter < _vendorTypeCount; counter++) {
       vendorTypes.add(
-        VendorType(
+        _VendorType(
           iconImage: 'assets/images/test_image_2.png',
           type: 'Type ' + (counter + 1).toString(),
         ),
@@ -208,16 +208,16 @@ class VendorTypeController {
   }
 }
 
-class VendorType {
+class _VendorType {
   String iconImage;
   String type;
-  VendorType({required this.iconImage, required this.type});
+  _VendorType({required this.iconImage, required this.type});
 }
 
-class VendorController {
-  List<Vendor> vendors = [];
+class _VendorController {
+  List<_Vendor> vendors = [];
   final int _nearbyVendorCount = 10;
-  VendorController() {
+  _VendorController() {
     _populate();
   }
 
@@ -225,8 +225,8 @@ class VendorController {
     //TODO: Populate Vendor list from web source, replacing dummy, also get vendorcount
     for (var counter = 0; counter < _nearbyVendorCount; counter++) {
       vendors.add(
-        Vendor(
-            thumbNail: AssetImage('assets/images/test_image_1.png'),
+        _Vendor(
+            thumbNail: const AssetImage('assets/images/test_image_1.png'),
             name: 'Vendor ' + (counter + 1).toString(),
             address: '123 Main Street, near church',
             phone: '+1 (234)-4567'),
@@ -297,12 +297,12 @@ class VendorController {
   }
 }
 
-class Vendor {
+class _Vendor {
   ImageProvider thumbNail;
   String name;
   String address;
   String phone;
-  Vendor(
+  _Vendor(
       {required this.thumbNail,
       required this.name,
       required this.address,

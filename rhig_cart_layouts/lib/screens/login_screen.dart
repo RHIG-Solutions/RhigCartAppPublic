@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/constants.dart';
 import 'package:rhig_cart_layouts/styles.dart';
@@ -144,13 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   contentPadding: _kFieldContentPadding,
                   border: InputBorder.none,
                   labelText: 'Username',
-                  //TODO: Add username icon functionality (remove const)
                   labelStyle: kLoginFieldLabelTextStyle,
-                  suffixIcon: const Icon(
-                    CupertinoIcons.check_mark,
-                    size: 18.0,
-                    color: kRHIGGreen,
-                  ),
                   errorText:
                       _myLogin.failed ? 'Username or Password incorrect' : null,
                 ),

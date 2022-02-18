@@ -66,3 +66,5 @@ const kSearchResultBodyTextStyle = TextStyle(
   fontSize: 8,
   fontWeight: FontWeight.bold,
 );
+
+const kSummaryBodyTextStyle = TextStyle(color: kRHIGGrey, fontSize: 12.0);
