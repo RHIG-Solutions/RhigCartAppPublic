@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/constants.dart';
-import 'package:rhig_cart_layouts/models.dart';
 import 'package:rhig_cart_layouts/styles.dart';
+import 'package:rhig_cart_layouts/models/grid_list_item_model.dart';
+
+enum DeliveryMethod { door2door, pickup, collect }
 
 Divider buildDividerLight() =>
     const Divider(thickness: 2.0, color: Color(0xFFEEEEEE));
@@ -171,43 +173,6 @@ class BuildStarRating extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-//TODO: Figure out how to display images correctly - use ClipRRect to shape
-class BuildOldImageAndTextBox extends StatelessWidget {
-  final ImageProvider image;
-  final Widget text;
-  final VoidCallback target;
-  const BuildOldImageAndTextBox(
-      {Key? key, required this.image, required this.text, required this.target})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      child: GestureDetector(
-        onTap: target,
-        child: Material(
-          color: Colors.white,
-          elevation: kElevation,
-          borderRadius: kInputFieldBorderRadius,
-          child: SizedBox(
-            height: 140.0,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Image(
-                  image: image,
-                  height: 90.0,
-                ),
-                Flexible(child: text),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

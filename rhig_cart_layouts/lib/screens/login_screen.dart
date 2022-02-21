@@ -11,8 +11,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //TODO: Verify if TextControllers need disposal.
-
   //----------
   //Username and password field specs
   static const BorderRadiusGeometry _kInputFieldBorderRadius =
@@ -90,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .requestFocus(_myLogin._usernameNode);
                               });
                             }),
-                        Expanded(child: Container(height: 15.0)),
+                        Expanded(child: Container(height: 20.0)),
                         _buildDivider(),
                         const SizedBox(height: 20.0),
                         _buildCreateAccountButton(),

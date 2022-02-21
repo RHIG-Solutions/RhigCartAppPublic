@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'package:rhig_cart_layouts/constants.dart';
-import 'package:rhig_cart_layouts/models.dart';
+import 'package:rhig_cart_layouts/models/vendor_model.dart';
 
 class VendorStoreScreen extends StatefulWidget {
   const VendorStoreScreen({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
   Widget build(BuildContext context) {
     final String _chosenVendor =
         ModalRoute.of(context)!.settings.arguments as String;
-    final VendorModel myCategories = VendorModel(name: _chosenVendor);
+    final Vendor myCategories = Vendor(name: _chosenVendor);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -68,7 +68,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  Container _buildPortraitTitleBlock(VendorModel myCategories) {
+  Container _buildPortraitTitleBlock(Vendor myCategories) {
     return Container(
       width: double.infinity,
       color: kRHIGGreen,
@@ -115,7 +115,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  Container _buildLandscapeTitleBlock(VendorModel myCategories) {
+  Container _buildLandscapeTitleBlock(Vendor myCategories) {
     //TODO: WIP, layout will change once decision is made on tags
     return Container(
       width: double.infinity,
@@ -157,7 +157,7 @@ class _VendorStoreScreenState extends State<VendorStoreScreen> {
     );
   }
 
-  ElevatedButton _buildFavouriteButton(VendorModel myCategories) {
+  ElevatedButton _buildFavouriteButton(Vendor myCategories) {
     return ElevatedButton(
       onPressed: () {
         setState(() {

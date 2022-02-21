@@ -3,7 +3,7 @@ import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/constants.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'package:intl/intl.dart';
-import 'package:rhig_cart_layouts/models.dart';
+import 'package:rhig_cart_layouts/models/user_model.dart';
 
 class MyCartScreen extends StatefulWidget {
   const MyCartScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class MyCartScreen extends StatefulWidget {
 class _MyCartScreenState extends State<MyCartScreen> {
   //TODO: Integrate session
   //TODO: Address overflow issues with large number of items.
-  ShopperModel myShopper = ShopperModel(id: 'Shopper 1');
+  User myShopper = User();
   var f = NumberFormat.currency(symbol: '\$');
   final List<TextEditingController> _itemNumberTextController = [];
 
@@ -98,7 +98,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
     return Text(
       myShopper.cart[counter].numberOfItems.toString() +
           ' x ' +
-          myShopper.cart[counter].item,
+          myShopper.cart[counter].name,
       style: const TextStyle(
         color: kRHIGGreen,
         fontSize: 12,
@@ -201,7 +201,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
         const Expanded(child: SizedBox()),
         const Text('Total: '),
         Text(
-          f.format(myShopper.totalCost).toString(),
+          f.format(myShopper.getCartTotal()).toString(),
           style:
               const TextStyle(color: kRHIGGreen, fontWeight: FontWeight.bold),
         )

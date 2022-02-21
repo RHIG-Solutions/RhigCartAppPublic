@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/constants.dart';
 import 'package:rhig_cart_layouts/styles.dart';
-import 'package:rhig_cart_layouts/models.dart';
 
 class DeliveryMethodScreen extends StatefulWidget {
   const DeliveryMethodScreen({Key? key}) : super(key: key);

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_layouts/models.dart';
 import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/constants.dart';
 import 'package:rhig_cart_layouts/styles.dart';
 import 'package:intl/intl.dart';
+import 'package:rhig_cart_layouts/models/user_model.dart';
+import 'package:rhig_cart_layouts/models/vendor_model.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   OrderSummaryScreen({Key? key}) : super(key: key);
 
   final f = NumberFormat.currency(symbol: '\$');
-  //TODO: I am  a bit lost with the current data setup. just making dummy sets for now
-  final ShopperModel myShopper = ShopperModel(id: 'Dummy');
-  final VendorModel myVendor = VendorModel(name: 'Dummy');
+
+  final User myShopper = User();
+  final Vendor myVendor = Vendor(name: 'Dummy');
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,7 @@ class OrderSummaryScreen extends StatelessWidget {
                 children: [
                   Text(myShopper.countItems().toString() + ' items'),
                   Text(
-                    f.format(myShopper.totalCost).toString(),
+                    f.format(myShopper.getCartTotal()).toString(),
                     style: const TextStyle(color: kRHIGGreen),
                   ),
                 ],
@@ -106,7 +107,7 @@ class OrderSummaryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      myShopper.cart[i].item,
+                      myShopper.cart[i].name,
                       style: kSummaryBodyTextStyle,
                     ),
                     Text(
@@ -124,7 +125,7 @@ class OrderSummaryScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    f.format(myShopper.totalCost).toString(),
+                    f.format(myShopper.getCartTotal()).toString(),
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, color: kRHIGGreen),
                   ),

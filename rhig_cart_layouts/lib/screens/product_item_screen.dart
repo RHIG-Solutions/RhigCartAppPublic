@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_layouts/reusables.dart';
 import 'package:rhig_cart_layouts/constants.dart';
-import 'package:rhig_cart_layouts/models.dart';
+import 'package:rhig_cart_layouts/models/grid_list_item_model.dart';
 
 class ProductItemScreen extends StatelessWidget {
   const ProductItemScreen({Key? key}) : super(key: key);
